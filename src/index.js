@@ -1,4 +1,4 @@
 import React from 'react'
 import ReactDom from 'react-dom'
-import App from './app.jsx'
-ReactDom.render(<App/>,document.querySelector('#root'))
+import Route from './router/index.js'
+ReactDom.render(<Route/>,document.querySelector('#root'))
