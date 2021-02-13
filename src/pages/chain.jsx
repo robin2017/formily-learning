@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   SchemaForm,
   SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
-  Reset,
+  LifeCycleTypes,
 } from '@formily/next';
 import { Input, Select } from '@formily/next-components';
 const components = {
@@ -25,20 +25,24 @@ export default () => {
       components={components}
       // 控制显示隐藏
       effects={($, { setFieldState }) => {
-        // $为函数:function (type, matcher)
-        $('onFieldChange', 'aa').subscribe((fieldState) => {
-          console.log('aa field-change:', fieldState);
-          setFieldState('bb', (state) => {
-            state.visible = fieldState.value === 123;
+        // 初始值
+        $(LifeCycleTypes.ON_FORM_INIT).subscribe(() => {
+          setFieldState('aa', (state) => {
+            state.value = 123;
+          });
+        });
+        // 变化时
+        $(LifeCycleTypes.ON_FIELD_CHANGE, 'aa').subscribe((bbState) => {
+          setFieldState('bb', (aaState) => {
+            aaState.visible = bbState.value === 123;
           });
         });
       }}
     >
       <Field title='AA' enum={aaOptions} name='aa' x-component='Select' />
       <Field title='BB' name='bb' x-component='Input' />
-      <FormButtonGroup offset={5}>
+      <FormButtonGroup>
         <Submit>查询</Submit>
-        <Reset>重置</Reset>
       </FormButtonGroup>
     </SchemaForm>
   );
